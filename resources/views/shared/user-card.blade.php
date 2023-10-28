@@ -5,16 +5,17 @@
                 <img style="width:150px" class="me-3 avatar-sm rounded-circle" src="{{ $user->getImageURL() }}"
                     alt="Mario Avatar">
                 <div>
-                    <h3 class="card-title mb-0"><a href="#"> {{ $user->name }} 
+                    <h3 class="card-title mb-0"><a href="#"> {{ $user->name }}
                         </a></h3>
                     <span class="fs-6 text-muted">{{ $user->email }}</span>
                 </div>
             </div>
             <div>
                 @auth
-                    @if (auth()->id() === $user->id)
+                    {{-- @if (auth()->id() === $user->id) --}}
+                    @can('update', $user)
                         <a href="{{ route('idea.users.edit', $user->id) }}">Düzenle</a>
-                    @endif
+                    @endcan
                 @endauth
             </div>
         </div>
@@ -37,7 +38,8 @@
 
             @auth
 
-                @if (auth()->id() !== $user->id)
+                {{--  @if (auth()->id() !== $user->id) --}}
+                @if (Auth::user()->isNot($user))
                     <div class="mt-3">
                         @if (auth()->user()->follows($user))
                             <form action="{{ route('user.unfollow', $user->id) }}" method="post">
